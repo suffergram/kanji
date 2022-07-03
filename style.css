@@ -1,0 +1,67 @@
+body {
+	background-color: #121212;
+	color: #FFFFFF;
+	-webkit-tap-highlight-color: transparent;
+	user-select: none;
+}
+
+*:focus {
+    outline: 0 !important;
+}
+
+#container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+#card {
+	background-color: rgba(255, 255, 255, .07);
+	border-radius: 10px;
+	padding: 50px;
+	margin: 10px;
+	width: 395px;
+}
+
+#card p {
+	margin: 0;
+	font-size: 2em;
+}
+
+#card input, #card button {
+	font-size: 2em;
+	border: none;
+	width: 100%;
+	margin: 5px 0;
+	border-radius: 5px;
+}
+
+#card input:focus {
+	outline: none;
+}
+
+.option {
+	cursor: pointer;
+	background-color: #BB86FC;
+	color: #121212;
+}
+
+.description {
+	font-size: 1.5em !important;
+}
+
+.kanji {
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	grid-gap: 5px;
+}
+
+
+
+
+

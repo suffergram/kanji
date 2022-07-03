@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Kanji learner</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="container">
+		<div id="card" typeid="1">
+			<p class="description">Type the word in <u>hiragana</u></p>
+			<p class="word">先生</p>
+			<input type="text" name="input">
+		</div>
+
+		<div id="card" typeid="2">
+			<p class="description">Type the word in <u>kanji</u></p>
+			<p class="word">せんせい</p>
+			<input type="text" name="input">
+			<div class="kanji">
+				<button class="option" value="0">先</button>
+				<button class="option" value="1">活</button>
+				<button class="option" value="2">月</button>
+				<button class="option" value="3">生</button>
+				<button class="option" value="4">学</button>
+				<button class="option" value="5">半</button>
+				<button class="option" value="6">女</button>
+				<button class="option" value="7">千</button>
+			</div>
+		</div>
+
+		<div id="card" typeid="3">
+			<p class="description">Choose the right answer</p>
+			<p class="word">先生</p>
+			<div>
+				<button class="option" value="0">せんせい</button>
+				<button class="option" value="1">がくせい</button>
+				<button class="option" value="2">せいかつ</button>
+				<button class="option" value="3">せんげつ</button>
+			</div>
+		</div>
+
+		<div id="card" typeid="4">
+			<p class="description">Choose the right answer</p>
+			<p class="word">せんせい</p>
+			<div>
+				<button class="option" value="0">先生</button>
+				<button class="option" value="1">学生</button>
+				<button class="option" value="2">生活</button>
+				<button class="option" value="3">先月</button>
+			</div>
+		</div>
+	</div>
+	<script src="list.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
