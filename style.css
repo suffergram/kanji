@@ -61,7 +61,18 @@ body {
 	grid-gap: 5px;
 }
 
+.right {
+	background-color: #89ee89;
+	color: #016601;
+}
 
+.wrong {
+	background-color: #ee8989;
+	color: #660101;
+}
 
-
+#card .result {
+	border-radius: 5px;
+	margin-top: 5px;
+}
 
