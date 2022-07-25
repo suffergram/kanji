@@ -1,5 +1,4 @@
 const container = document.querySelector('#container')
-let input = document.createElement('input')
 const answers = []
 let answer
 let sessionArray = [...five]
@@ -17,6 +16,7 @@ function newCard(type, arr = undefined) {
 	let word = document.createElement('p')
 	word.classList = 'word'
 
+	let input = document.createElement('input')
 	input.innerHTML = ''
 	input.type = 'text'
 	input.name = 'input'
@@ -34,6 +34,11 @@ function newCard(type, arr = undefined) {
 			word.remove()
 			card.append(div)
 			console.log(answers)
+			for (let item of answers) {
+				let answer = document.createElement('p')
+				answer.innerHTML = item
+				div.append(answer)
+			}
 			break
 		case 1:
 			description.innerHTML = 'Type the word in <u>hiragana</u>'
@@ -118,23 +123,6 @@ function newCard(type, arr = undefined) {
 	}
 }
 
-function check(event) {
-	if (event.key == 'Enter') {
-		checkAnswer()
-		let current = document.querySelector('#card').children[2]
-		if (!current.classList.contains('right')) {
-			current.classList.toggle('wrong')
-			answers.push(input.value + ' (' + answer + ')')
-			document.removeEventListener('keydown', check)
-		} else {
-			answers.push(input.value)
-			document.removeEventListener('keydown', check)
-		}
-		if (document.querySelector('input').getAttribute('typeid') == 2) disableButtons()
-		setTimeout(changeCard, 1000)
-	}
-}
-
 function disableButtons() {
 	let buttons = container.querySelectorAll('.option')
 	for (let item of buttons) {
@@ -142,41 +130,69 @@ function disableButtons() {
 	}
 }
 
-function checkAnswer(input) {
-	let currentCard = document.querySelector('#card')
-	let id = currentCard.getAttribute('typeid')
-	let currentWord = currentCard.children[1].innerHTML
-	if (id == 1 || id == 2) input = currentCard.children[2]
-	for (let item of five) {
-		if (id == 1 || id == 3) {
-			if (item[0] == currentWord) answer = item[1]
-		} else if (id == 2 || id == 4) {
-			if (item[1] == currentWord) answer = item[0]
-		}
-	}
+// function check(event) {
+// 	if (event.key == 'Enter') {
+// 		checkAnswer()
+// 		let current = document.querySelector('#card').children[2]
+// 		if (!current.classList.contains('right')) {
+// 			current.classList.toggle('wrong')
+// 			answers.push(input.value + ' (' + answer + ')')
+// 			document.removeEventListener('keydown', check)
+// 		} else {
+// 			answers.push(input.value)
+// 			document.removeEventListener('keydown', check)
+// 		}
+// 		if (document.querySelector('input').getAttribute('typeid') == 2) disableButtons()
+// 		setTimeout(changeCard, 1000)
+// 	}
+// }
+
+// function checkAnswer(input) {
+// 	let currentCard = document.querySelector('#card')
+// 	let id = currentCard.getAttribute('typeid')
+// 	let currentWord = currentCard.children[1].innerHTML
+// 	if (id == 1 || id == 2) input = currentCard.children[2]
+// 	for (let item of five) {
+// 		if (id == 1 || id == 3) {
+// 			if (item[0] == currentWord) answer = item[1]
+// 		} else if (id == 2 || id == 4) {
+// 			if (item[1] == currentWord) answer = item[0]
+// 		}
+// 	}
 	
-	if ((id == 1 || id == 2) && input.value.trim() == answer) {
+// 	if ((id == 1 || id == 2) && input.value.trim() == answer) {
+// 		input.classList.toggle('right')
+// 		input.readOnly = true
+// 		if (id == 2) disableButtons()
+// 		answers.push(input.innerHTML)
+// 		setTimeout(changeCard, 1000)
+// 	}
+	
+// 	if (id == 3 || id == 4) {
+// 		if (input.innerHTML == answer) {
+// 			input.classList.toggle('right')
+// 			input.readOnly = true
+// 			answers.push(input.innerHTML)
+// 		} else {
+// 			input.classList.toggle('wrong')
+// 			input.readOnly = true
+// 			answers.push(input.innerHTML + ' (' + answer + ')')
+// 		}
+// 		disableButtons()
+// 		setTimeout(changeCard, 1000)
+// 	}
+// 	document.removeEventListener('keydown', check)
+// }
+
+function check() {
+	let input = container.querySelector('input')
+	let word = document.querySelector('.word')
+	let current = five.filter(item => item[0] == word.innerHTML)[0]
+	if (input.value == current[1]) {
 		input.classList.toggle('right')
 		input.readOnly = true
-		if (id == 2) disableButtons()
-		answers.push(input.innerHTML)
-		setTimeout(changeCard, 1000)
+		
 	}
-	
-	if (id == 3 || id == 4) {
-		if (input.innerHTML == answer) {
-			input.classList.toggle('right')
-			input.readOnly = true
-			answers.push(input.innerHTML)
-		} else {
-			input.classList.toggle('wrong')
-			input.readOnly = true
-			answers.push(input.innerHTML + ' (' + answer + ')')
-		}
-		disableButtons()
-		setTimeout(changeCard, 1000)
-	}
-	document.removeEventListener('keydown', check)
 }
 
 function newSession() {
@@ -192,6 +208,7 @@ function newSession() {
 }
 
 function changeCard() {
+	document.removeEventListener('keydown', check)
 	let oldCard = document.querySelector('#card')
 	if (!!oldCard) oldCard.remove()
 	if (session > 0) {
@@ -203,13 +220,13 @@ function changeCard() {
 	}
 }
 
-// newCard(1, five[10])
+newCard(1, five[10])
 // newCard(2, five[19])
 // newCard(3, five[55])
 // newCard(4, five[38])
 // newCard(0)
 
-newSession()
+// newSession()
 
 // newCard(five[Math.floor(Math.random() * five.length)], Math.floor(Math.random() * 4) + 1)
 
@@ -224,7 +241,6 @@ container.addEventListener('click', function() {
 		}
 	}
 })
-
 
 
 
