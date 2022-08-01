@@ -36,7 +36,9 @@ function newCard(type, arr = undefined) {
 			console.log(answers)
 			for (let item of answers) {
 				let answer = document.createElement('p')
-				answer.innerHTML = item
+				answer.innerHTML = item[0]
+				answer.classList.toggle(item[1] ? 'right' : 'wrong')
+				answer.classList.add('result')
 				div.append(answer)
 			}
 			break
@@ -44,7 +46,7 @@ function newCard(type, arr = undefined) {
 			description.innerHTML = 'Type the word in <u>hiragana</u>'
 			word.innerHTML = arr[0]
 			card.append(input)
-			document.addEventListener('keydown', check)
+			document.addEventListener('keyup', check)
 			break
 		case 2:
 			description.innerHTML = 'Type the word in <u>kanji</u>'
@@ -76,7 +78,7 @@ function newCard(type, arr = undefined) {
 				option.innerHTML = [...kanjis][i]
 				div.append(option)
 			}
-			document.addEventListener('keydown', check)
+			document.addEventListener('keyup', check)
 			break
 		case 3:
 			word.innerHTML = arr[0]
@@ -130,69 +132,46 @@ function disableButtons() {
 	}
 }
 
-// function check(event) {
-// 	if (event.key == 'Enter') {
-// 		checkAnswer()
-// 		let current = document.querySelector('#card').children[2]
-// 		if (!current.classList.contains('right')) {
-// 			current.classList.toggle('wrong')
-// 			answers.push(input.value + ' (' + answer + ')')
-// 			document.removeEventListener('keydown', check)
-// 		} else {
-// 			answers.push(input.value)
-// 			document.removeEventListener('keydown', check)
-// 		}
-// 		if (document.querySelector('input').getAttribute('typeid') == 2) disableButtons()
-// 		setTimeout(changeCard, 1000)
-// 	}
-// }
-
-// function checkAnswer(input) {
-// 	let currentCard = document.querySelector('#card')
-// 	let id = currentCard.getAttribute('typeid')
-// 	let currentWord = currentCard.children[1].innerHTML
-// 	if (id == 1 || id == 2) input = currentCard.children[2]
-// 	for (let item of five) {
-// 		if (id == 1 || id == 3) {
-// 			if (item[0] == currentWord) answer = item[1]
-// 		} else if (id == 2 || id == 4) {
-// 			if (item[1] == currentWord) answer = item[0]
-// 		}
-// 	}
-	
-// 	if ((id == 1 || id == 2) && input.value.trim() == answer) {
-// 		input.classList.toggle('right')
-// 		input.readOnly = true
-// 		if (id == 2) disableButtons()
-// 		answers.push(input.innerHTML)
-// 		setTimeout(changeCard, 1000)
-// 	}
-	
-// 	if (id == 3 || id == 4) {
-// 		if (input.innerHTML == answer) {
-// 			input.classList.toggle('right')
-// 			input.readOnly = true
-// 			answers.push(input.innerHTML)
-// 		} else {
-// 			input.classList.toggle('wrong')
-// 			input.readOnly = true
-// 			answers.push(input.innerHTML + ' (' + answer + ')')
-// 		}
-// 		disableButtons()
-// 		setTimeout(changeCard, 1000)
-// 	}
-// 	document.removeEventListener('keydown', check)
-// }
-
-function check() {
+function check(event) {
 	let input = container.querySelector('input')
-	let word = document.querySelector('.word')
-	let current = five.filter(item => item[0] == word.innerHTML)[0]
-	if (input.value == current[1]) {
+	let current, currentWord, currentAnswer
+
+	let currentCardTypeId = +document.querySelector('#card').getAttribute('typeid')
+	switch (currentCardTypeId) {
+		case 1:
+		case 3:
+			current = five.filter(item => item[0] == document.querySelector('.word').innerHTML)[0]
+			currentWord = current[0]
+			currentAnswer = current[1]
+			break
+		case 2:
+		case 4:
+			current = five.filter(item => item[1] == document.querySelector('.word').innerHTML)[0]
+			currentWord = current[1]
+			currentAnswer = current[0]
+			break
+
+	}
+
+	if (input.value == currentAnswer) {
 		input.classList.toggle('right')
 		input.readOnly = true
-		
-	}
+		console.log('card type id: ' + currentCardTypeId + ' | input: ' + input.value + ' | right answer: ' + currentAnswer + ' (' + currentWord + ')')
+		document.removeEventListener('keyup', check)
+		answers.push([input.value, true, currentWord, currentAnswer])
+		disableButtons()
+		setTimeout(changeCard, 1000)
+	} else try {
+		if (event.key == 'Enter') {
+			input.classList.toggle('wrong')
+			input.readOnly = true
+			console.log('card type id: ' + currentCardTypeId + ' | input: ' + input.value + ' | right answer: ' + currentAnswer + ' (' + currentWord + ')')
+			document.removeEventListener('keyup', check)
+			answers.push([input.value, false, currentWord, currentAnswer])
+			disableButtons()
+			setTimeout(changeCard, 1000)
+		}
+	} catch (error) {}
 }
 
 function newSession() {
@@ -208,7 +187,6 @@ function newSession() {
 }
 
 function changeCard() {
-	document.removeEventListener('keydown', check)
 	let oldCard = document.querySelector('#card')
 	if (!!oldCard) oldCard.remove()
 	if (session > 0) {
@@ -220,9 +198,9 @@ function changeCard() {
 	}
 }
 
-newCard(1, five[10])
+// newCard(1, five[10])
 // newCard(2, five[19])
-// newCard(3, five[55])
+newCard(3, five[55])
 // newCard(4, five[38])
 // newCard(0)
 
@@ -233,12 +211,16 @@ newCard(1, five[10])
 container.addEventListener('click', function() {
 	if (event.target.className == 'option') {
 		let input = container.querySelector('input')
-		if (!!input) {
-			input.value += event.target.innerHTML
-			checkAnswer()
-		} else {
-			checkAnswer(event.target)
-		}
+		if (!!input) input.value += event.target.innerHTML
+		check()
+		event.target.blur()
+		// if (!!input) {
+		// 	input.value += event.target.innerHTML
+		// 	// checkAnswer()
+		// } 
+		// else {
+		// 	checkAnswer(event.target)
+		// }
 	}
 })
 
