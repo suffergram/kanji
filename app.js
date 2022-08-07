@@ -2,7 +2,8 @@ const container = document.querySelector('#container')
 const answers = []
 let answer
 let sessionArray = [...five]
-let session = 4
+let session
+let pressedButton
 
 function newCard(type, arr = undefined) {
 	let card = document.createElement('div')
@@ -137,6 +138,8 @@ function check(event) {
 	let current, currentWord, currentAnswer
 
 	let currentCardTypeId = +document.querySelector('#card').getAttribute('typeid')
+	let currentCheck = currentCardTypeId < 3 ? input.value : pressedButton.innerHTML
+
 	switch (currentCardTypeId) {
 		case 1:
 		case 3:
@@ -150,31 +153,26 @@ function check(event) {
 			currentWord = current[1]
 			currentAnswer = current[0]
 			break
-
 	}
 
-	if (input.value == currentAnswer) {
-		input.classList.toggle('right')
-		input.readOnly = true
-		console.log('card type id: ' + currentCardTypeId + ' | input: ' + input.value + ' | right answer: ' + currentAnswer + ' (' + currentWord + ')')
-		document.removeEventListener('keyup', check)
-		answers.push([input.value, true, currentWord, currentAnswer])
-		disableButtons()
-		setTimeout(changeCard, 1000)
-	} else try {
-		if (event.key == 'Enter') {
-			input.classList.toggle('wrong')
-			input.readOnly = true
-			console.log('card type id: ' + currentCardTypeId + ' | input: ' + input.value + ' | right answer: ' + currentAnswer + ' (' + currentWord + ')')
-			document.removeEventListener('keyup', check)
-			answers.push([input.value, false, currentWord, currentAnswer])
-			disableButtons()
-			setTimeout(changeCard, 1000)
-		}
-	} catch (error) {}
+	if (currentCheck == currentAnswer) {
+		validate(currentCardTypeId < 3 ? input : pressedButton, 'right', currentWord, currentAnswer)
+	} else if (!input || event.key == 'Enter') {
+		validate(currentCardTypeId < 3 ? input : pressedButton, 'wrong', currentWord, currentAnswer)
+	}
 }
 
-function newSession() {
+function validate(input, result, word, answer) {
+	input.classList.toggle(result)
+	input.readOnly = true
+	// console.log('card type id: ' + +document.querySelector('#card').getAttribute('typeid') + ' | input: ' + input.innerHTML || input.value + ' | right answer: ' + answer + ' (' + word + ')')
+	document.removeEventListener('keyup', check)
+	answers.push([input.innerHTML || input.value, result == 'right', word, answer])
+	disableButtons()
+	setTimeout(changeCard, 1000)
+}
+
+function newSession(number) {
 	for (let x = 0; x < sessionArray.length; x++) {
 		for (let i = 0; i < sessionArray.length - 1; i++) {
 			if (Math.round(Math.random())) {
@@ -182,7 +180,7 @@ function newSession() {
 			}
 		}
 	}
-
+	session = number
 	changeCard()
 }
 
@@ -200,27 +198,23 @@ function changeCard() {
 
 // newCard(1, five[10])
 // newCard(2, five[19])
-newCard(3, five[55])
+// newCard(3, five[55])
 // newCard(4, five[38])
 // newCard(0)
 
-// newSession()
-
-// newCard(five[Math.floor(Math.random() * five.length)], Math.floor(Math.random() * 4) + 1)
+newSession(2)
 
 container.addEventListener('click', function() {
 	if (event.target.className == 'option') {
 		let input = container.querySelector('input')
-		if (!!input) input.value += event.target.innerHTML
-		check()
-		event.target.blur()
-		// if (!!input) {
-		// 	input.value += event.target.innerHTML
-		// 	// checkAnswer()
-		// } 
-		// else {
-		// 	checkAnswer(event.target)
-		// }
+		if (!!input) {
+			input.value += event.target.innerHTML
+			check(container.querySelector('input'))
+			event.target.blur()
+		} else {
+			pressedButton = event.target
+			check()
+		}
 	}
 })
 
