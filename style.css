@@ -2,7 +2,6 @@ body {
 	background-color: #121212;
 	color: #FFFFFF;
 	-webkit-tap-highlight-color: transparent;
-	user-select: none;
 }
 
 *:focus {
@@ -27,6 +26,7 @@ body {
 	padding: 50px;
 	margin: 10px;
 	width: 395px;
+	user-select: none;
 }
 
 #card p {
