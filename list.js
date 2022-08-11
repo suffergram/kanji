@@ -130,6 +130,22 @@ const five = [
 ]
 
 const four = [
+	['上がる', 'あがる', 'to rise'],
+	['味', 'あじ', 'flavor; taste'],
+	['赤ちゃん', 'あかちゃん', 'baby; infant'],
+	['安心', 'あんしん', 'peace of mind'],
+	['集まる', 'あつまる', 'to gather; to collect'],
+	['集める', 'あつめる', 'to gather; to collect'],
+	['僕', 'ぼく', 'I'],
+	['力', 'ちから', 'force; strength; power'],
+	['地理', 'ちり', 'geography'],
+	['中学校', 'ちゅうがっこう', 'junior high school; middle school'],
+	['注意', 'ちゅうい', 'caution'],
+	['大分', 'だいぶ', 'considerably; greatly; a lot'],
+	['大学生', 'だいがくせい', 'university student; college student'],
+	['大事', 'だいじ', 'important; serious; crucial'],
+	['大体', 'だいたい', 'roughly'],  //jlptsensei N4 #50
+	['', '', ''],
 	['下手', 'へた', 'unskillful; poor; awkward'],
 	['上手', 'じょうず', 'skillful; skilled; good (at)'],
 	['手', 'て', 'hand; arm'],
