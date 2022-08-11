@@ -1,7 +1,7 @@
 const container = document.querySelector('#container')
 const answers = []
 let answer
-let sessionArray = [...five]
+let sessionArray = [...four]
 let session
 let pressedButton
 
@@ -59,8 +59,8 @@ function newCard(type, arr = undefined) {
 
 			let kanjis = arr[0].split('')
 			while (kanjis.length < 8) {
-				let random = Math.floor(Math.random() * five.length)
-				let currentKanji = five[random][0].slice(0, 1)
+				let random = Math.floor(Math.random() * sessionArray.length)
+				let currentKanji = sessionArray[random][0].slice(0, 1)
 				if (!kanjis.includes(currentKanji)) kanjis.push(currentKanji)
 			}
 
@@ -87,8 +87,8 @@ function newCard(type, arr = undefined) {
 
 			options = [arr[1]]
 			while (options.length < 4) {
-				let random = Math.floor(Math.random() * five.length)
-				let currentOption = five[random][1]
+				let random = Math.floor(Math.random() * sessionArray.length)
+				let currentOption = sessionArray[random][1]
 				if (!options.includes(currentOption)) options.push(currentOption)
 			}
 			for (let i = 0; i < options.length - 1; i++) {
@@ -108,8 +108,8 @@ function newCard(type, arr = undefined) {
 
 			options = [arr[0]]
 			while (options.length < 4) {
-				let random = Math.floor(Math.random() * five.length)
-				let currentOption = five[random][0]
+				let random = Math.floor(Math.random() * sessionArray.length)
+				let currentOption = sessionArray[random][0]
 				if (!options.includes(currentOption)) options.push(currentOption)
 			}
 			for (let i = 0; i < options.length - 1; i++) {
@@ -143,13 +143,13 @@ function check(event) {
 	switch (currentCardTypeId) {
 		case 1:
 		case 3:
-			current = five.filter(item => item[0] == document.querySelector('.word').innerHTML)[0]
+			current = sessionArray.filter(item => item[0] == document.querySelector('.word').innerHTML)[0]
 			currentWord = current[0]
 			currentAnswer = current[1]
 			break
 		case 2:
 		case 4:
-			current = five.filter(item => item[1] == document.querySelector('.word').innerHTML)[0]
+			current = sessionArray.filter(item => item[1] == document.querySelector('.word').innerHTML)[0]
 			currentWord = current[1]
 			currentAnswer = current[0]
 			break
@@ -169,6 +169,7 @@ function validate(input, result, word, answer) {
 	document.removeEventListener('keyup', check)
 	answers.push([input.innerHTML || input.value, result == 'right', word, answer])
 	disableButtons()
+	sessionArray.shift()
 	setTimeout(changeCard, 1000)
 }
 
@@ -189,7 +190,6 @@ function changeCard() {
 	if (!!oldCard) oldCard.remove()
 	if (session > 0) {
 		newCard(Math.floor(Math.random() * 4) + 1, sessionArray[0])
-		sessionArray.shift()
 		session--
 	} else {
 		newCard(0)
@@ -202,7 +202,7 @@ function changeCard() {
 // newCard(4, five[38])
 // newCard(0)
 
-newSession(2)
+newSession(3)
 
 container.addEventListener('click', function() {
 	if (event.target.className == 'option') {
@@ -217,7 +217,6 @@ container.addEventListener('click', function() {
 		}
 	}
 })
-
 
 
 
