@@ -1,247 +1,106 @@
-const container = document.querySelector('#container')
-const answers = []
-const trainingOptions = [1, 3, 5, 10, 50]
-let answer
-let sessionArray = [...four, ...five]
-let session
-let pressedButton
-
-function mainMenu() {
-	let menuContainer = document.createElement('div')
-	menuContainer.id = 'menu'
-	container.append(menuContainer)
-	let optionsBox = document.createElement('div')
-	optionsBox.id = 'testoptions'
-	menuContainer.append(optionsBox)
-	for (let item of trainingOptions) {
-		let option = document.createElement('button')
-		option.innerHTML = item
-		option.classList = 'testoption'
-		optionsBox.append(option)
-	}
+body {
+	background-color: #121212;
+	color: #FFFFFF;
+	-webkit-tap-highlight-color: transparent;
 }
 
-function newCard(type, arr = undefined) {
-	let card = document.createElement('div')
-	card.id = 'card'
-	card.setAttribute('typeid', type)
-	container.append(card)
-
-	let description = document.createElement('p')
-	description.classList = 'description'
-
-	let word = document.createElement('p')
-	word.classList = 'word'
-
-	let input = document.createElement('input')
-	input.innerHTML = ''
-	input.type = 'text'
-	input.name = 'input'
-
-	description.innerHTML = 'Choose the right answer'
-	card.append(description)
-	card.append(word)
-
-	let options
-	let div = document.createElement('div')
-
-	switch (type) {
-		case 0:
-			description.innerHTML = 'Your result:'
-			word.remove()
-			card.append(div)
-			console.log(answers)
-			for (let item of answers) {
-				let answer = document.createElement('p')
-				answer.innerHTML = item[0]
-				answer.classList.toggle(item[1] ? 'right' : 'wrong')
-				answer.classList.add('result')
-				div.append(answer)
-			}
-			break
-		case 1:
-			description.innerHTML = 'Type the word in <u>hiragana</u>'
-			word.innerHTML = arr[0]
-			card.append(input)
-			document.addEventListener('keyup', check)
-			break
-		case 2:
-			description.innerHTML = 'Type the word in <u>kanji</u>'
-			word.innerHTML = arr[1]
-			card.append(input)
-
-			div.classList = 'kanji'
-			card.append(div)
-
-			let kanjis = arr[0].split('')
-			while (kanjis.length < 8) {
-				let random = Math.floor(Math.random() * sessionArray.length)
-				let currentKanji = sessionArray[random][0].slice(0, 1)
-				if (!kanjis.includes(currentKanji)) kanjis.push(currentKanji)
-			}
-
-			// shuffle kanjis twice
-			for (let i = 0; i < kanjis.length - 1; i++) {
-				if (Math.round(Math.random())) [kanjis[i], kanjis[i + 1]] = [kanjis[i + 1], kanjis[i]]
-			}
-			for (let i = 0; i < kanjis.length / 2; i++) {
-				if (Math.round(Math.random())) [kanjis[i], kanjis[kanjis.length - i - 1]] = [kanjis[kanjis.length - i - 1], kanjis[i]]
-			}
-
-			for (let i = 0; i < kanjis.length; i++) {
-				let option = document.createElement('button')
-				option.classList = 'option'
-				option.value = i
-				option.innerHTML = [...kanjis][i]
-				div.append(option)
-			}
-			document.addEventListener('keyup', check)
-			break
-		case 3:
-			word.innerHTML = arr[0]
-			card.append(div)
-
-			options = [arr[1]]
-			while (options.length < 4) {
-				let random = Math.floor(Math.random() * sessionArray.length)
-				let currentOption = sessionArray[random][1]
-				if (!options.includes(currentOption)) options.push(currentOption)
-			}
-			for (let i = 0; i < options.length - 1; i++) {
-				if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
-			}
-			for (let i = 0; i < options.length; i++) {
-				let option = document.createElement('button')
-				option.classList = 'option'
-				option.value = i
-				option.innerHTML = options[i]
-				div.append(option)
-			}
-			break
-		case 4:
-			word.innerHTML = arr[1]
-			card.append(div)
-
-			options = [arr[0]]
-			while (options.length < 4) {
-				let random = Math.floor(Math.random() * sessionArray.length)
-				let currentOption = sessionArray[random][0]
-				if (!options.includes(currentOption)) options.push(currentOption)
-			}
-			for (let i = 0; i < options.length - 1; i++) {
-				if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
-			}
-			for (let i = 0; i < options.length; i++) {
-				let option = document.createElement('button')
-				option.classList = 'option'
-				option.value = i
-				option.innerHTML = options[i]
-				div.append(option)
-			}
-			break
-	}
+*:focus {
+    outline: 0 !important;
 }
 
-function disableButtons() {
-	let buttons = container.querySelectorAll('.option')
-	for (let item of buttons) {
-		item.disabled = true
-	}
+#container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
 
-function check(event) {
-	let input = container.querySelector('input')
-	let current, currentWord, currentAnswer
-
-	let currentCardTypeId = +document.querySelector('#card').getAttribute('typeid')
-	let currentCheck = currentCardTypeId < 3 ? input.value : pressedButton.innerHTML
-
-	switch (currentCardTypeId) {
-		case 1:
-		case 3:
-			current = sessionArray.filter(item => item[0] == document.querySelector('.word').innerHTML)[0]
-			currentWord = current[0]
-			currentAnswer = current[1]
-			break
-		case 2:
-		case 4:
-			current = sessionArray.filter(item => item[1] == document.querySelector('.word').innerHTML)[0]
-			currentWord = current[1]
-			currentAnswer = current[0]
-			break
-	}
-
-	if (currentCheck == currentAnswer) {
-		validate(currentCardTypeId < 3 ? input : pressedButton, 'right', currentWord, currentAnswer)
-	} else if (!input || event.key == 'Enter') {
-		validate(currentCardTypeId < 3 ? input : pressedButton, 'wrong', currentWord, currentAnswer)
-	}
+#menu {
+	width: 50vw;
+	height: 50vh;
+	padding: 5%;
+	box-sizing: border-box;
+	outline: 1px solid red; 
 }
 
-function validate(input, result, word, answer) {
-	input.classList.toggle(result)
-	input.readOnly = true
-	// console.log('card type id: ' + +document.querySelector('#card').getAttribute('typeid') + ' | input: ' + input.innerHTML || input.value + ' | right answer: ' + answer + ' (' + word + ')')
-	document.removeEventListener('keyup', check)
-	answers.push([input.innerHTML || input.value, result == 'right', word, answer])
-	disableButtons()
-	sessionArray.shift()
-	setTimeout(changeCard, 1000)
+#testoptions {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(1, 1fr);
+	grid-gap: 5px;
+	outline: 1px solid green;
 }
 
-function newSession(number) {
-	for (let x = 0; x < sessionArray.length; x++) {
-		for (let i = 0; i < sessionArray.length - 1; i++) {
-			if (Math.round(Math.random())) {
-				[sessionArray[i], sessionArray[i + 1]] = [sessionArray[i + 1], sessionArray[i]]
-			}
-		}
-	}
-	session = number
-	changeCard()
+#testoptions button {
+	border: none;
+	padding: 20px;
+	background-color: rgba(255, 255, 255, .07);
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	cursor: pointer;
 }
 
-function changeCard() {
-	let trash = document.querySelector('#menu') || document.querySelector('#card') 
-	if (!!trash) trash.remove()
-	if (session > 0) {
-		newCard(Math.floor(Math.random() * 4) + 1, sessionArray[0])
-		session--
-	} else {
-		newCard(0)
-	}
+#card {
+	background-color: rgba(255, 255, 255, .07);
+	border-radius: 10px;
+	padding: 50px;
+	margin: 10px;
+	width: 395px;
+	user-select: none;
 }
 
-// newCard(1, five[10])
-// newCard(2, five[19])
-// newCard(3, five[55])
-// newCard(4, five[38])
-// newCard(0)
+#card p {
+	margin: 0;
+	font-size: 2em;
+}
 
+#card input, #card button {
+	font-size: 2em;
+	border: none;
+	width: 100%;
+	margin: 5px 0;
+	border-radius: 5px;
+}
 
-mainMenu()
+#card input:focus {
+	outline: none;
+}
 
-// newSession(3)
+.option {
+	cursor: pointer;
+	background-color: #BB86FC;
+	color: #121212;
+}
 
+.description {
+	font-size: 1.5em !important;
+}
 
+.kanji {
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	grid-gap: 5px;
+}
 
-container.addEventListener('click', function() {
-	if (event.target.className == 'option') {
-		let input = container.querySelector('input')
-		if (!!input) {
-			input.value += event.target.innerHTML
-			check(container.querySelector('input'))
-			event.target.blur()
-		} else {
-			pressedButton = event.target
-			check()
-		}
-	}
+.right {
+	background-color: #89ee89;
+	color: #016601;
+}
 
-	if (event.target.className == 'testoption') {
-		newSession(+event.target.innerHTML)
-	}
-})
+.wrong {
+	background-color: #ee8989;
+	color: #660101;
+}
 
-
-
+#card .result {
+	border-radius: 5px;
+	margin-top: 5px;
+}
