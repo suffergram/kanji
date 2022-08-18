@@ -1,9 +1,25 @@
 const container = document.querySelector('#container')
 const answers = []
+const trainingOptions = [1, 3, 5, 10, 50]
 let answer
-let sessionArray = [...four]
+let sessionArray = [...four, ...five]
 let session
 let pressedButton
+
+function mainMenu() {
+	let menuContainer = document.createElement('div')
+	menuContainer.id = 'menu'
+	container.append(menuContainer)
+	let optionsBox = document.createElement('div')
+	optionsBox.id = 'testoptions'
+	menuContainer.append(optionsBox)
+	for (let item of trainingOptions) {
+		let option = document.createElement('button')
+		option.innerHTML = item
+		option.classList = 'testoption'
+		optionsBox.append(option)
+	}
+}
 
 function newCard(type, arr = undefined) {
 	let card = document.createElement('div')
@@ -186,8 +202,8 @@ function newSession(number) {
 }
 
 function changeCard() {
-	let oldCard = document.querySelector('#card')
-	if (!!oldCard) oldCard.remove()
+	let trash = document.querySelector('#menu') || document.querySelector('#card') 
+	if (!!trash) trash.remove()
 	if (session > 0) {
 		newCard(Math.floor(Math.random() * 4) + 1, sessionArray[0])
 		session--
@@ -202,7 +218,12 @@ function changeCard() {
 // newCard(4, five[38])
 // newCard(0)
 
-newSession(3)
+
+mainMenu()
+
+// newSession(3)
+
+
 
 container.addEventListener('click', function() {
 	if (event.target.className == 'option') {
@@ -215,6 +236,10 @@ container.addEventListener('click', function() {
 			pressedButton = event.target
 			check()
 		}
+	}
+
+	if (event.target.className == 'testoption') {
+		newSession(+event.target.innerHTML)
 	}
 })
 
