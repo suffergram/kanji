@@ -47,17 +47,37 @@ function newCard(type, arr = undefined) {
 
 	switch (type) {
 		case 0:
-			description.innerHTML = 'Your result:'
 			word.remove()
+
+			let quizCount = 0, quizRight = 0, quizWrong = 0
+			let quizInfo = document.createElement('div')
+			quizInfo.classList = 'info'
+			description.classList = 'title'
+			
+			description.after(quizInfo)
+			description.after(document.createElement('hr'))
+			quizInfo.after(document.createElement('hr'))
 			card.append(div)
+			
 			console.log(answers)
 			for (let item of answers) {
 				let answer = document.createElement('p')
-				answer.innerHTML = item[0]
+				quizCount++
+				answer.innerHTML = quizCount + '. ' + item[0]
 				answer.classList.toggle(item[1] ? 'right' : 'wrong')
 				answer.classList.add('result')
 				div.append(answer)
+				item[1] ? quizRight++ : quizWrong++
 			}
+
+			let percentage = +(quizRight / quizCount).toFixed(2) * 100
+			if (percentage == NaN) percentage = 0
+			description.innerHTML = 'Well done! Your result is ' + percentage + '%'
+			quizInfo.innerHTML += '<p>' + percentage + '%</p>'
+			quizInfo.innerHTML += '<p>amount of cards: ' + quizCount + '</p>'
+			quizInfo.innerHTML += '<p class="result right">right: ' + quizRight + '</p>'
+			quizInfo.innerHTML += '<p class="result wrong">wrong: ' + quizWrong + '</p>'
+
 			break
 		case 1:
 			description.innerHTML = 'Type the word in <u>hiragana</u>'
@@ -202,8 +222,8 @@ function newSession(number) {
 }
 
 function changeCard() {
-	let trash = document.querySelector('#menu') || document.querySelector('#card') 
-	if (!!trash) trash.remove()
+	let oldCard = document.querySelector('#menu') || document.querySelector('#card') 
+	if (!!oldCard) oldCard.remove()
 	if (session > 0) {
 		newCard(Math.floor(Math.random() * 4) + 1, sessionArray[0])
 		session--
@@ -218,12 +238,9 @@ function changeCard() {
 // newCard(4, five[38])
 // newCard(0)
 
-
 mainMenu()
 
-// newSession(3)
-
-
+// newSession(1)
 
 container.addEventListener('click', function() {
 	if (event.target.className == 'option') {
