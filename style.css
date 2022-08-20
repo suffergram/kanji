@@ -2,6 +2,7 @@ body {
 	background-color: #121212;
 	color: #FFFFFF;
 	-webkit-tap-highlight-color: transparent;
+	font-family: tahoma;
 }
 
 *:focus {
@@ -103,4 +104,32 @@ body {
 #card .result {
 	border-radius: 5px;
 	margin-top: 5px;
+	background: none;
+}
+
+#card .result.right {
+	color: #89ee89;
+}
+
+#card .result.wrong {
+	color: #ee8989;
+}
+
+#card .title {
+	text-align: center;
+	font-size: 1.9em;
+}
+
+#card .info p {
+	font-style: italic;
+	font-size: 1.2em;
+}
+
+#card .info p:first-child {
+	font-style: italic;
+	font-size: 1.5em;
+}
+
+#card hr {
+	border-color: rgba(255, 255, 255, .2);
 }
