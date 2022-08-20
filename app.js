@@ -1,12 +1,14 @@
 const container = document.querySelector('#container')
-const answers = []
 const trainingOptions = [1, 3, 5, 10, 50]
+let answers = []
 let answer
 let sessionArray = [...four, ...five]
 let session
 let pressedButton
 
 function mainMenu() {
+	answers = []
+	removeTrash()
 	let menuContainer = document.createElement('div')
 	menuContainer.id = 'menu'
 	container.append(menuContainer)
@@ -51,11 +53,16 @@ function newCard(type, arr = undefined) {
 
 			let quizCount = 0, quizRight = 0, quizWrong = 0
 			let quizInfo = document.createElement('div')
+			let againButton = document.createElement('button')
+			againButton.innerHTML = 'Again'
+			againButton.classList = 'again option'
+
 			quizInfo.classList = 'info'
 			description.classList = 'title'
 			
 			description.after(quizInfo)
-			description.after(document.createElement('hr'))
+			description.after(againButton)
+			againButton.after(document.createElement('hr'))
 			quizInfo.after(document.createElement('hr'))
 			card.append(div)
 			
@@ -77,6 +84,7 @@ function newCard(type, arr = undefined) {
 			quizInfo.innerHTML += '<p>amount of cards: ' + quizCount + '</p>'
 			quizInfo.innerHTML += '<p class="result right">right: ' + quizRight + '</p>'
 			quizInfo.innerHTML += '<p class="result wrong">wrong: ' + quizWrong + '</p>'
+			quizInfo.innerHTML += '<p>time: ' + 0 + 's</p>'
 
 			break
 		case 1:
@@ -222,14 +230,18 @@ function newSession(number) {
 }
 
 function changeCard() {
-	let oldCard = document.querySelector('#menu') || document.querySelector('#card') 
-	if (!!oldCard) oldCard.remove()
+	removeTrash()
 	if (session > 0) {
 		newCard(Math.floor(Math.random() * 4) + 1, sessionArray[0])
 		session--
 	} else {
 		newCard(0)
 	}
+}
+
+function removeTrash() {
+	let trash = document.querySelector('#menu') || document.querySelector('#card') 
+	if (!!trash) trash.remove()
 }
 
 // newCard(1, five[10])
@@ -257,6 +269,10 @@ container.addEventListener('click', function() {
 
 	if (event.target.className == 'testoption') {
 		newSession(+event.target.innerHTML)
+	}
+
+	if (event.target.className == 'again option') {
+		mainMenu()
 	}
 })
 
