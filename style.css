@@ -109,15 +109,17 @@ body {
 
 #card .result.right {
 	color: #89ee89;
+	margin: 0;
 }
 
 #card .result.wrong {
 	color: #ee8989;
+	margin: 0;
 }
 
 #card .title {
 	text-align: center;
-	font-size: 1.9em;
+	font-size: 1.8em;
 }
 
 #card .info p {
