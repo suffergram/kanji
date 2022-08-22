@@ -22,31 +22,30 @@ body {
 }
 
 #menu {
-	width: 50vw;
-	height: 50vh;
-	padding: 5%;
+	width: 495px;
+	height: 495px;
+	padding: 50px;
 	box-sizing: border-box;
-	outline: 1px solid red; 
 }
 
 #testoptions {
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(1, 1fr);
-	grid-gap: 5px;
-	outline: 1px solid green;
+	grid-gap: 10px;
 }
 
 #testoptions button {
 	border: none;
 	padding: 20px;
-	background-color: rgba(255, 255, 255, .07);
 	border-radius: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: white;
 	cursor: pointer;
+	background-color: #BB86FC;
+	color: #121212;
+	font-size: 1.5em
 }
 
 #card {
@@ -102,8 +101,7 @@ body {
 }
 
 #card .result {
-	border-radius: 5px;
-	margin-top: 5px;
+	font-size: 1.5em;
 	background: none;
 }
 
@@ -120,6 +118,7 @@ body {
 #card .title {
 	text-align: center;
 	font-size: 1.8em;
+	margin-bottom: 25px;
 }
 
 #card .info p {
@@ -127,11 +126,11 @@ body {
 	font-size: 1.2em;
 }
 
-#card .info p:first-child {
-	font-style: italic;
-	font-size: 1.5em;
-}
-
 #card hr {
 	border-color: rgba(255, 255, 255, .2);
+}
+
+.again.button, .menu.button {
+	width: 10px;
+	background: none;
 }
