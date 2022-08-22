@@ -1,13 +1,15 @@
 const container = document.querySelector('#container')
-const trainingOptions = [1, 3, 5, 10, 50]
+const trainingOptions = [1, 3, 5, 10, 25, 50]
 let answers = []
 let answer
 let sessionArray = [...four, ...five]
 let session
 let pressedButton
+let amount = 0
+let start
 
 function mainMenu() {
-	answers = []
+	amount = 0
 	removeTrash()
 	let menuContainer = document.createElement('div')
 	menuContainer.id = 'menu'
@@ -50,23 +52,27 @@ function newCard(type, arr = undefined) {
 	switch (type) {
 		case 0:
 			word.remove()
-
-			let quizCount = 0, quizRight = 0, quizWrong = 0
-			let quizInfo = document.createElement('div')
-			let againButton = document.createElement('button')
-			againButton.innerHTML = 'Again'
-			againButton.classList = 'again option'
-
-			quizInfo.classList = 'info'
 			description.classList = 'title'
+			let quizCount = 0, quizRight = 0, quizWrong = 0
+			
+			let quizInfo = document.createElement('div')
+			quizInfo.classList = 'info'
+			
+			let againButton = document.createElement('button')
+			againButton.innerHTML = '↺Again'
+			againButton.classList = 'again option'
+			
+			let menuButton = document.createElement('button')
+			menuButton.innerHTML = '⤺Menu '
+			menuButton.classList = 'menu option'
 			
 			description.after(quizInfo)
 			description.after(againButton)
+			description.after(menuButton)
 			againButton.after(document.createElement('hr'))
 			quizInfo.after(document.createElement('hr'))
 			card.append(div)
 			
-			console.log(answers)
 			for (let item of answers) {
 				let answer = document.createElement('p')
 				quizCount++
@@ -77,14 +83,15 @@ function newCard(type, arr = undefined) {
 				item[1] ? quizRight++ : quizWrong++
 			}
 
-			let percentage = +(quizRight / quizCount).toFixed(2) * 100
+			let percentage = Math.floor(+(quizRight / quizCount).toFixed(2) * 100)
+			let time = Date.now() - start
+			console.log(time)
 			if (percentage == NaN) percentage = 0
-			description.innerHTML = 'Well done! Your result is ' + percentage + '%'
-			quizInfo.innerHTML += '<p>' + percentage + '%</p>'
+			description.innerHTML = 'Well done! Your result is <u>' + percentage + '%</u>'
 			quizInfo.innerHTML += '<p>amount of cards: ' + quizCount + '</p>'
 			quizInfo.innerHTML += '<p class="result right">right: ' + quizRight + '</p>'
 			quizInfo.innerHTML += '<p class="result wrong">wrong: ' + quizWrong + '</p>'
-			quizInfo.innerHTML += '<p>time: ' + 0 + 's</p>'
+			quizInfo.innerHTML += '<p>time: ' + (time / 1000).toFixed(1) + ' s</p>'
 
 			break
 		case 1:
@@ -209,7 +216,6 @@ function check(event) {
 function validate(input, result, word, answer) {
 	input.classList.toggle(result)
 	input.readOnly = true
-	// console.log('card type id: ' + +document.querySelector('#card').getAttribute('typeid') + ' | input: ' + input.innerHTML || input.value + ' | right answer: ' + answer + ' (' + word + ')')
 	document.removeEventListener('keyup', check)
 	answers.push([input.innerHTML || input.value, result == 'right', word, answer])
 	disableButtons()
@@ -218,6 +224,8 @@ function validate(input, result, word, answer) {
 }
 
 function newSession(number) {
+	answers = []
+	start = Date.now()
 	for (let x = 0; x < sessionArray.length; x++) {
 		for (let i = 0; i < sessionArray.length - 1; i++) {
 			if (Math.round(Math.random())) {
@@ -268,10 +276,15 @@ container.addEventListener('click', function() {
 	}
 
 	if (event.target.className == 'testoption') {
-		newSession(+event.target.innerHTML)
+		amount = +event.target.innerHTML
+		newSession(amount)
 	}
 
 	if (event.target.className == 'again option') {
+		newSession(amount)
+	}
+
+	if (event.target.className == 'menu option') {
 		mainMenu()
 	}
 })
