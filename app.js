@@ -14,14 +14,36 @@ function mainMenu() {
 	let menuContainer = document.createElement('div')
 	menuContainer.id = 'menu'
 	container.append(menuContainer)
-	let optionsBox = document.createElement('div')
-	optionsBox.id = 'testoptions'
-	menuContainer.append(optionsBox)
+
+	let amountDescription = document.createElement('p')
+	amountDescription.classList = 'description'
+	amountDescription.innerHTML = 'Choose amount of questions'
+	menuContainer.append(amountDescription)
+
+	let testOptionsBox = document.createElement('div')
+	testOptionsBox.id = 'testoptions'
+	menuContainer.append(testOptionsBox)
 	for (let item of trainingOptions) {
 		let option = document.createElement('button')
 		option.innerHTML = item
 		option.classList = 'testoption'
-		optionsBox.append(option)
+		testOptionsBox.append(option)
+	}
+
+	let levelDescription = document.createElement('p')
+	levelDescription.classList = 'description'
+	levelDescription.innerHTML = 'Choose level of kanji'
+	menuContainer.append(levelDescription)
+
+	let levelOptionsBox = document.createElement('div')
+	levelOptionsBox.id = 'testoptions'
+	menuContainer.append(levelOptionsBox)
+	for (let i = 5; i >= 4; i--) {
+		let option = document.createElement('button')
+		option.innerHTML = 'N' + i
+		option.classList = 'testoption'
+		option.disabled = true
+		levelOptionsBox.append(option)
 	}
 }
 
@@ -59,18 +81,23 @@ function newCard(type, arr = undefined) {
 			quizInfo.classList = 'info'
 			
 			let againButton = document.createElement('button')
-			againButton.innerHTML = '↺Again'
+			againButton.innerHTML = '↺ Again'
 			againButton.classList = 'again option'
 			
 			let menuButton = document.createElement('button')
-			menuButton.innerHTML = '⤺Menu '
+			menuButton.innerHTML = '≡ Menu '
 			menuButton.classList = 'menu option'
-			
-			description.after(quizInfo)
-			description.after(againButton)
-			description.after(menuButton)
-			againButton.after(document.createElement('hr'))
+
+			let buttonsContainer = document.createElement('div')
+			buttonsContainer.classList = 'buttonscontainer'
+
+			description.after(buttonsContainer)
+			buttonsContainer.after(quizInfo)
+			buttonsContainer.after(document.createElement('hr'))
 			quizInfo.after(document.createElement('hr'))
+
+			buttonsContainer.append(menuButton)
+			buttonsContainer.append(againButton)
 			card.append(div)
 			
 			for (let item of answers) {
