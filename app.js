@@ -48,6 +48,49 @@ function mainMenu() {
 }
 
 function newCard(type, arr = undefined) {
+
+	function addCardAnswers(typeInput, amountOfAnswers = 4) {
+		options = [arr[typeInput]]
+		while (options.length < amountOfAnswers) {
+			let random = Math.floor(Math.random() * sessionArray.length)
+			let currentOption = sessionArray[random][typeInput]
+			if (!options.includes(currentOption)) options.push(currentOption)
+		}
+		for (let i = 0; i < options.length - 1; i++) {
+			if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
+		}
+		for (let i = 0; i < options.length; i++) {
+			let option = document.createElement('button')
+			option.classList = 'option'
+			option.value = i
+			option.innerHTML = options[i]
+			div.append(option)
+		}
+	}
+
+	function addCardOptions(typeInput, amountOfOptions = 8) {
+		let options = arr[typeInput].split('')
+		while (options.length < amountOfOptions) {
+			let random = Math.floor(Math.random() * sessionArray.length)
+			let currentKanji = sessionArray[random][typeInput].slice(0, 1)
+			if (!options.includes(currentKanji)) options.push(currentKanji)
+		}
+		// shuffle options twice
+		for (let i = 0; i < options.length - 1; i++) {
+			if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
+		}
+		for (let i = 0; i < options.length / 2; i++) {
+			if (Math.round(Math.random())) [options[i], options[options.length - i - 1]] = [options[options.length - i - 1], options[i]]
+		}
+		for (let i = 0; i < options.length; i++) {
+			let option = document.createElement('button')
+			option.classList = 'option'
+			option.value = i
+			option.innerHTML = [...options][i]
+			div.append(option)
+		}
+	}
+
 	let card = document.createElement('div')
 	card.id = 'card'
 	card.setAttribute('typeid', type)
@@ -125,6 +168,11 @@ function newCard(type, arr = undefined) {
 			description.innerHTML = 'Type the word in <u>hiragana</u>'
 			word.innerHTML = arr[0]
 			card.append(input)
+
+			div.classList = 'cardoptions'
+			card.append(div)
+
+			addCardOptions(1)
 			document.addEventListener('keyup', check)
 			break
 		case 2:
@@ -132,74 +180,21 @@ function newCard(type, arr = undefined) {
 			word.innerHTML = arr[1]
 			card.append(input)
 
-			div.classList = 'kanji'
+			div.classList = 'cardoptions'
 			card.append(div)
 
-			let kanjis = arr[0].split('')
-			while (kanjis.length < 8) {
-				let random = Math.floor(Math.random() * sessionArray.length)
-				let currentKanji = sessionArray[random][0].slice(0, 1)
-				if (!kanjis.includes(currentKanji)) kanjis.push(currentKanji)
-			}
-
-			// shuffle kanjis twice
-			for (let i = 0; i < kanjis.length - 1; i++) {
-				if (Math.round(Math.random())) [kanjis[i], kanjis[i + 1]] = [kanjis[i + 1], kanjis[i]]
-			}
-			for (let i = 0; i < kanjis.length / 2; i++) {
-				if (Math.round(Math.random())) [kanjis[i], kanjis[kanjis.length - i - 1]] = [kanjis[kanjis.length - i - 1], kanjis[i]]
-			}
-
-			for (let i = 0; i < kanjis.length; i++) {
-				let option = document.createElement('button')
-				option.classList = 'option'
-				option.value = i
-				option.innerHTML = [...kanjis][i]
-				div.append(option)
-			}
+			addCardOptions(0)
 			document.addEventListener('keyup', check)
 			break
 		case 3:
 			word.innerHTML = arr[0]
 			card.append(div)
-
-			options = [arr[1]]
-			while (options.length < 4) {
-				let random = Math.floor(Math.random() * sessionArray.length)
-				let currentOption = sessionArray[random][1]
-				if (!options.includes(currentOption)) options.push(currentOption)
-			}
-			for (let i = 0; i < options.length - 1; i++) {
-				if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
-			}
-			for (let i = 0; i < options.length; i++) {
-				let option = document.createElement('button')
-				option.classList = 'option'
-				option.value = i
-				option.innerHTML = options[i]
-				div.append(option)
-			}
+			addCardAnswers(1)
 			break
 		case 4:
 			word.innerHTML = arr[1]
 			card.append(div)
-
-			options = [arr[0]]
-			while (options.length < 4) {
-				let random = Math.floor(Math.random() * sessionArray.length)
-				let currentOption = sessionArray[random][0]
-				if (!options.includes(currentOption)) options.push(currentOption)
-			}
-			for (let i = 0; i < options.length - 1; i++) {
-				if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
-			}
-			for (let i = 0; i < options.length; i++) {
-				let option = document.createElement('button')
-				option.classList = 'option'
-				option.value = i
-				option.innerHTML = options[i]
-				div.append(option)
-			}
+			addCardAnswers(0)
 			break
 	}
 }
@@ -279,15 +274,8 @@ function removeTrash() {
 	if (!!trash) trash.remove()
 }
 
-// newCard(1, five[10])
-// newCard(2, five[19])
-// newCard(3, five[55])
-// newCard(4, five[38])
-// newCard(0)
-
+// create main menu
 mainMenu()
-
-// newSession(1)
 
 container.addEventListener('click', function() {
 	if (event.target.className == 'option') {
@@ -315,5 +303,7 @@ container.addEventListener('click', function() {
 		mainMenu()
 	}
 })
+
+
 
 
