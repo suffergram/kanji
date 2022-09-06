@@ -30,14 +30,15 @@ body {
 
 #testoptions {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(6, 1fr);
 	grid-template-rows: repeat(1, 1fr);
 	grid-gap: 10px;
 }
 
 #testoptions button {
 	border: none;
-	padding: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	border-radius: 5px;
 	display: flex;
 	align-items: center;
@@ -130,7 +131,8 @@ body {
 	border-color: rgba(255, 255, 255, .2);
 }
 
-.again.button, .menu.button {
-	width: 10px;
-	background: none;
+.buttonscontainer {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 5px;
 }
