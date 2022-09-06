@@ -85,7 +85,7 @@ body {
 	font-size: 1.5em !important;
 }
 
-.kanji {
+.cardoptions {
 	display: grid;
 	grid-template-columns: repeat(8, 1fr);
 	grid-gap: 5px;
