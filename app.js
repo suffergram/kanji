@@ -1,8 +1,8 @@
 const container = document.querySelector('#container')
-const trainingOptions = [1, 3, 5, 10, 25, 50]
+let sessionArray = [...four, ...five]
+const trainingOptions = [1, 3, 5, 10, 15, 25, 50, 100, 150, 200, sessionArray.length]
 let answers = []
 let answer
-let sessionArray = [...four, ...five]
 let session
 let pressedButton
 let amount = 0
@@ -21,12 +21,12 @@ function mainMenu() {
 	menuContainer.append(amountDescription)
 
 	let testOptionsBox = document.createElement('div')
-	testOptionsBox.id = 'testoptions'
+	testOptionsBox.classList = 'testoptions'
 	menuContainer.append(testOptionsBox)
 	for (let item of trainingOptions) {
 		let option = document.createElement('button')
 		option.innerHTML = item
-		option.classList = 'testoption'
+		option.classList = 'amount'
 		testOptionsBox.append(option)
 	}
 
@@ -36,7 +36,7 @@ function mainMenu() {
 	menuContainer.append(levelDescription)
 
 	let levelOptionsBox = document.createElement('div')
-	levelOptionsBox.id = 'testoptions'
+	levelOptionsBox.classList = 'testoptions'
 	menuContainer.append(levelOptionsBox)
 	for (let i = 5; i >= 4; i--) {
 		let option = document.createElement('button')
@@ -45,6 +45,13 @@ function mainMenu() {
 		option.disabled = true
 		levelOptionsBox.append(option)
 	}
+
+	menuContainer.append(document.createElement('hr'))
+
+	let startButton = document.createElement('button')
+	startButton.classList = 'start description'
+	startButton.innerHTML = 'Start'
+	menuContainer.append(startButton)
 }
 
 function newCard(type, arr = undefined) {
@@ -155,7 +162,6 @@ function newCard(type, arr = undefined) {
 
 			let percentage = Math.floor(+(quizRight / quizCount).toFixed(2) * 100)
 			let time = Date.now() - start
-			console.log(time)
 			if (percentage == NaN) percentage = 0
 			description.innerHTML = 'Well done! Your result is <u>' + percentage + '%</u>'
 			quizInfo.innerHTML += '<p>amount of cards: ' + quizCount + '</p>'
@@ -290,16 +296,23 @@ container.addEventListener('click', function() {
 		}
 	}
 
-	if (event.target.className == 'testoption') {
-		amount = +event.target.innerHTML
-		newSession(amount)
+	if (event.target.className.includes('amount')) {
+		if (event.target.className.includes('pressed')) {
+			event.target.classList.remove('pressed')
+			amount = 0
+		} else {
+			amount = +event.target.innerHTML
+			document.querySelectorAll('.amount').forEach(elem => elem.classList.remove('pressed'))
+			event.target.classList.add('pressed')
+		}
+		// newSession(amount)
 	}
 
-	if (event.target.className == 'again option') {
-		newSession(amount)
+	if (event.target.className.includes('again') || event.target.className.includes('start')) {
+		if (!!amount) newSession(amount)
 	}
 
-	if (event.target.className == 'menu option') {
+	if (event.target.className.includes('menu')) {
 		mainMenu()
 	}
 })
