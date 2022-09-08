@@ -28,14 +28,14 @@ body {
 	box-sizing: border-box;
 }
 
-#testoptions {
+.testoptions {
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
 	grid-template-rows: repeat(1, 1fr);
 	grid-gap: 10px;
 }
 
-#testoptions button {
+.testoptions button, .start {
 	border: none;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -127,7 +127,7 @@ body {
 	font-size: 1.2em;
 }
 
-#card hr {
+hr {
 	border-color: rgba(255, 255, 255, .2);
 }
 
@@ -135,4 +135,9 @@ body {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-gap: 5px;
+}
+
+.pressed {
+	background-color: #7742B8 !important;
+	/*color: #121212;*/
 }
