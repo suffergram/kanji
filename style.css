@@ -3,6 +3,7 @@ body {
 	color: #FFFFFF;
 	-webkit-tap-highlight-color: transparent;
 	font-family: tahoma;
+	user-select: none;
 }
 
 *:focus {
@@ -55,7 +56,6 @@ body {
 	padding: 50px;
 	margin: 10px;
 	width: 395px;
-	user-select: none;
 }
 
 #card p {
@@ -137,7 +137,7 @@ hr {
 	grid-gap: 5px;
 }
 
-.pressed {
+.pressed, .start:active {
 	background-color: #7742B8 !important;
 	/*color: #121212;*/
 }
