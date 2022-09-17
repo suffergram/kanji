@@ -77,6 +77,7 @@ function newCard(type, arr = undefined) {
 
 	function addCardOptions(typeInput, amountOfOptions = 8) {
 		let options = arr[typeInput].split('')
+		// while amount of option buttons less than needed, add more
 		while (options.length < amountOfOptions) {
 			let random = Math.floor(Math.random() * sessionArray.length)
 			let currentKanji = sessionArray[random][typeInput].slice(0, 1)
