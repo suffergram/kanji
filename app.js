@@ -1,12 +1,21 @@
 const container = document.querySelector('#container')
-let sessionArray = [...four, ...five]
-const trainingOptions = [1, 3, 5, 10, 15, 25, 50, 100, 150, 200, sessionArray.length]
+const trainingOptions = [1, 3, 5, 10, 15, 25, 50, 100, 150, 200]
+let sessionArray
 let answers = []
 let answer
 let session
 let pressedButton
 let amount = 0
+let kanji = ''
 let start
+
+// initializing global object
+window.database = {
+	n5kanji: n5kanji,
+	n5vocab: n5vocab,
+	n4kanji: n4kanji,
+	n4vocab: n4vocab,
+}
 
 function mainMenu() {
 	amount = 0
@@ -21,7 +30,8 @@ function mainMenu() {
 	menuContainer.append(amountDescription)
 
 	let testOptionsBox = document.createElement('div')
-	testOptionsBox.classList = 'testoptions'
+	testOptionsBox.classList = 'options'
+	testOptionsBox.id = 'amount'
 	menuContainer.append(testOptionsBox)
 	for (let item of trainingOptions) {
 		let option = document.createElement('button')
@@ -36,14 +46,34 @@ function mainMenu() {
 	menuContainer.append(levelDescription)
 
 	let levelOptionsBox = document.createElement('div')
-	levelOptionsBox.classList = 'testoptions'
+	levelOptionsBox.classList = 'options'
+	levelOptionsBox.id = 'kanji'
 	menuContainer.append(levelOptionsBox)
+
+	let setDescription = document.createElement('p')
+	setDescription.classList = 'description'
+	setDescription.innerHTML = 'Choose level of vocabulary'
+	menuContainer.append(setDescription)
+
+	let setOptionsBox = document.createElement('div')
+	setOptionsBox.classList = 'options'
+	setOptionsBox.id = 'vocabulary'
+	menuContainer.append(setOptionsBox)
+
 	for (let i = 5; i >= 4; i--) {
 		let option = document.createElement('button')
 		option.innerHTML = 'N' + i
+		option.id = 'n' + i + 'kanji'
 		option.classList = 'testoption'
-		option.disabled = true
 		levelOptionsBox.append(option)
+	}
+
+	for (let i = 5; i >= 4; i--) {
+		let option = document.createElement('button')
+		option.innerHTML = 'N' + i
+		option.id = 'n' + i + 'vocab'
+		option.classList = 'testoption'
+		setOptionsBox.append(option)
 	}
 
 	menuContainer.append(document.createElement('hr'))
@@ -179,12 +209,12 @@ function newCard(type, arr = undefined) {
 			div.classList = 'cardoptions'
 			card.append(div)
 
-			addCardOptions(1)
+			addCardOptions(2)
 			document.addEventListener('keyup', check)
 			break
 		case 2:
 			description.innerHTML = 'Type the word in <u>kanji</u>'
-			word.innerHTML = arr[1]
+			word.innerHTML = arr[2]
 			card.append(input)
 
 			div.classList = 'cardoptions'
@@ -196,10 +226,10 @@ function newCard(type, arr = undefined) {
 		case 3:
 			word.innerHTML = arr[0]
 			card.append(div)
-			addCardAnswers(1)
+			addCardAnswers(2)
 			break
 		case 4:
-			word.innerHTML = arr[1]
+			word.innerHTML = arr[2]
 			card.append(div)
 			addCardAnswers(0)
 			break
@@ -215,7 +245,8 @@ function disableButtons() {
 
 function check(event) {
 	let input = container.querySelector('input')
-	let current, currentWord, currentAnswer
+	let current, currentWord
+	let currentAnswer = []
 
 	let currentCardTypeId = +document.querySelector('#card').getAttribute('typeid')
 	let currentCheck = currentCardTypeId < 3 ? input.value : pressedButton.innerHTML
@@ -225,17 +256,17 @@ function check(event) {
 		case 3:
 			current = sessionArray.filter(item => item[0] == document.querySelector('.word').innerHTML)[0]
 			currentWord = current[0]
-			currentAnswer = current[1]
+			for (let i = 2; i < current.length; i++) currentAnswer.push(current[i])
 			break
 		case 2:
 		case 4:
-			current = sessionArray.filter(item => item[1] == document.querySelector('.word').innerHTML)[0]
-			currentWord = current[1]
-			currentAnswer = current[0]
+			current = sessionArray.filter(item => item[2] == document.querySelector('.word').innerHTML)[0]
+			currentWord = current[2]
+			currentAnswer.push(current[0])
 			break
 	}
 
-	if (currentCheck == currentAnswer) {
+	if (currentAnswer.includes(currentCheck)) {
 		validate(currentCardTypeId < 3 ? input : pressedButton, 'right', currentWord, currentAnswer)
 	} else if (!input || event.key == 'Enter') {
 		validate(currentCardTypeId < 3 ? input : pressedButton, 'wrong', currentWord, currentAnswer)
@@ -252,7 +283,7 @@ function validate(input, result, word, answer) {
 	setTimeout(changeCard, 1000)
 }
 
-function newSession(number) {
+function newSession() {
 	answers = []
 	start = Date.now()
 	for (let x = 0; x < sessionArray.length; x++) {
@@ -262,7 +293,7 @@ function newSession(number) {
 			}
 		}
 	}
-	session = number
+	session = amount
 	changeCard()
 }
 
@@ -279,6 +310,36 @@ function changeCard() {
 function removeTrash() {
 	let trash = document.querySelector('#menu') || document.querySelector('#card') 
 	if (!!trash) trash.remove()
+}
+
+function setSessionSettings() {
+	let sessionAmount = document.querySelector('#amount > .pressed')
+	amount = sessionAmount == undefined ? 0 : +sessionAmount.innerHTML
+
+	let sessionKanji = document.querySelectorAll('#kanji > .pressed')
+	kanji = ''
+	for (let item of sessionKanji) {
+		kanji += database[item.id]
+	}
+
+	let sessionVocabulary = document.querySelectorAll('#vocabulary > .pressed')
+	let temporaryArray = []
+	for (let item of sessionVocabulary) temporaryArray.push(...database[item.id])
+
+	// create set of words for training
+	sessionArray = []
+	if (!!!temporaryArray.length) temporaryArray = [...n5vocab, ...n4vocab]
+	if (kanji != '') {
+		for (let item of temporaryArray) {
+			let temporary = item[0]
+			for (let letter of temporary) {
+				if (kanji.includes(letter) || hiragana.includes(letter)) temporary = temporary.slice(1)
+			}
+			if (temporary == '') sessionArray.push(item)
+		}
+	} else {
+		sessionArray = temporaryArray
+	}
 }
 
 // create main menu
@@ -300,17 +361,23 @@ container.addEventListener('click', function() {
 	if (event.target.className.includes('amount')) {
 		if (event.target.className.includes('pressed')) {
 			event.target.classList.remove('pressed')
-			amount = 0
 		} else {
-			amount = +event.target.innerHTML
 			document.querySelectorAll('.amount').forEach(elem => elem.classList.remove('pressed'))
 			event.target.classList.add('pressed')
 		}
-		// newSession(amount)
 	}
 
-	if (event.target.className.includes('again') || event.target.className.includes('start')) {
-		if (!!amount) newSession(amount)
+	if (event.target.className.includes('testoption')) {
+		event.target.classList.toggle('pressed')
+	}
+
+	if (event.target.className.includes('start')) {
+		setSessionSettings()
+		if (!!amount) newSession()
+	}
+
+	if (event.target.className.includes('again')) {
+		newSession()
 	}
 
 	if (event.target.className.includes('menu')) {
