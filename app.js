@@ -85,17 +85,30 @@ function mainMenu() {
 }
 
 function newCard(type, arr = undefined) {
+	function shuffleOptions(arr) {
+		for (let shuffle = 0; shuffle < arr.length * 2; shuffle++) {
+			for (let i = 0; i < arr.length - 1; i++) {
+				if (Math.random() < .6) [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]
+			}
+			for (let i = 0; i < arr.length / 2; i++) {
+				if (Math.random() < .6) [arr[i], arr[arr.length - i - 1]] = [arr[arr.length - i - 1], arr[i]]
+			}
+		}
+		return arr
+	}
 
 	function addCardAnswers(typeInput, amountOfAnswers = 4) {
-		options = [arr[typeInput]]
-		while (options.length < amountOfAnswers) {
+		let options = new Set([arr[typeInput]])
+		while (options.size < amountOfAnswers) {
 			let random = Math.floor(Math.random() * sessionArray.length)
 			let currentOption = sessionArray[random][typeInput]
-			if (!options.includes(currentOption)) options.push(currentOption)
+			options.add(currentOption)
 		}
-		for (let i = 0; i < options.length - 1; i++) {
-			if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
-		}
+		options = Array.from(options)
+
+		// shuffle options
+		shuffleOptions(options)
+
 		for (let i = 0; i < options.length; i++) {
 			let option = document.createElement('button')
 			option.classList = 'option'
@@ -106,20 +119,18 @@ function newCard(type, arr = undefined) {
 	}
 
 	function addCardOptions(typeInput, amountOfOptions = 8) {
-		let options = arr[typeInput].split('')
+		let options = new Set(arr[typeInput].split(''))
 		// while amount of option buttons less than needed, add more
-		while (options.length < amountOfOptions) {
+		while (options.size < amountOfOptions) {
 			let random = Math.floor(Math.random() * sessionArray.length)
 			let currentKanji = sessionArray[random][typeInput].slice(0, 1)
-			if (!options.includes(currentKanji)) options.push(currentKanji)
+			options.add(currentKanji)
 		}
-		// shuffle options twice
-		for (let i = 0; i < options.length - 1; i++) {
-			if (Math.round(Math.random())) [options[i], options[i + 1]] = [options[i + 1], options[i]]
-		}
-		for (let i = 0; i < options.length / 2; i++) {
-			if (Math.round(Math.random())) [options[i], options[options.length - i - 1]] = [options[options.length - i - 1], options[i]]
-		}
+		options = Array.from(options)
+		
+		// shuffle options
+		shuffleOptions(options)
+
 		for (let i = 0; i < options.length; i++) {
 			let option = document.createElement('button')
 			option.classList = 'option'
@@ -149,7 +160,6 @@ function newCard(type, arr = undefined) {
 	card.append(description)
 	card.append(word)
 
-	let options
 	let div = document.createElement('div')
 
 	switch (type) {
@@ -384,7 +394,6 @@ container.addEventListener('click', function() {
 		mainMenu()
 	}
 })
-
 
 
 
