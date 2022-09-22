@@ -8,6 +8,7 @@ let pressedButton
 let amount = 0
 let kanji = ''
 let start
+let changeCardTimer = 2000
 
 // initializing global object
 window.database = {
@@ -143,10 +144,10 @@ function newCard(type, arr = undefined) {
 	let card = document.createElement('div')
 	card.id = 'card'
 	card.setAttribute('typeid', type)
-	container.append(card)
 
 	let description = document.createElement('p')
 	description.classList = 'description'
+	description.innerHTML = 'Choose the right answer'
 
 	let word = document.createElement('p')
 	word.classList = 'word'
@@ -156,11 +157,18 @@ function newCard(type, arr = undefined) {
 	input.type = 'text'
 	input.name = 'input'
 
-	description.innerHTML = 'Choose the right answer'
-	card.append(description)
-	card.append(word)
+	let translation = document.createElement('p')
+	translation.classList = 'translation description'
+	// translation.hidden = true
+	translation.innerHTML = 'don\'t cheat'
+	translation.style.opacity = 0
 
 	let div = document.createElement('div')
+
+	container.append(card)
+	card.append(description)
+	card.append(word)
+	card.append(translation)
 
 	switch (type) {
 		case 0:
@@ -254,12 +262,25 @@ function disableButtons() {
 }
 
 function check(event) {
+	function validate(input, result) {
+		input.classList.toggle(result)
+		input.readOnly = true
+		document.removeEventListener('keyup', check)
+		answers.push([input.innerHTML || input.value, result == 'right', currentWord, currentAnswer])
+		disableButtons()
+		currentTranslation.innerHTML = current[1]
+		currentTranslation.style.opacity = 1
+		sessionArray.shift()
+		setTimeout(changeCard, changeCardTimer)
+	}
+
 	let input = container.querySelector('input')
 	let current, currentWord
 	let currentAnswer = []
 
 	let currentCardTypeId = +document.querySelector('#card').getAttribute('typeid')
 	let currentCheck = currentCardTypeId < 3 ? input.value : pressedButton.innerHTML
+	let currentTranslation = document.querySelector('.translation')
 
 	switch (currentCardTypeId) {
 		case 1:
@@ -277,20 +298,10 @@ function check(event) {
 	}
 
 	if (currentAnswer.includes(currentCheck)) {
-		validate(currentCardTypeId < 3 ? input : pressedButton, 'right', currentWord, currentAnswer)
+		validate(currentCardTypeId < 3 ? input : pressedButton, 'right')
 	} else if (!input || event.key == 'Enter') {
-		validate(currentCardTypeId < 3 ? input : pressedButton, 'wrong', currentWord, currentAnswer)
+		validate(currentCardTypeId < 3 ? input : pressedButton, 'wrong')
 	}
-}
-
-function validate(input, result, word, answer) {
-	input.classList.toggle(result)
-	input.readOnly = true
-	document.removeEventListener('keyup', check)
-	answers.push([input.innerHTML || input.value, result == 'right', word, answer])
-	disableButtons()
-	sessionArray.shift()
-	setTimeout(changeCard, 1000)
 }
 
 function newSession() {
@@ -394,6 +405,5 @@ container.addEventListener('click', function() {
 		mainMenu()
 	}
 })
-
 
 
