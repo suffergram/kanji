@@ -146,3 +146,7 @@ hr {
 	color: #121212;
 }
 
+.translation p {
+	font-size: 0.8em !important;
+	font-style: italic;
+}
