@@ -160,7 +160,7 @@ function newCard(type, arr = undefined) {
 	let translation = document.createElement('p')
 	translation.classList = 'translation description'
 	// translation.hidden = true
-	translation.innerHTML = 'don\'t cheat'
+	// translation.innerHTML = 'don\'t cheat'
 	translation.style.opacity = 0
 
 	let div = document.createElement('div')
@@ -268,7 +268,9 @@ function check(event) {
 		document.removeEventListener('keyup', check)
 		answers.push([input.innerHTML || input.value, result == 'right', currentWord, currentAnswer])
 		disableButtons()
-		currentTranslation.innerHTML = current[1]
+		for (let item of current[1].split('; ')) {
+			currentTranslation.innerHTML += '<p>- ' + item + '</p>'
+		}
 		currentTranslation.style.opacity = 1
 		sessionArray.shift()
 		setTimeout(changeCard, changeCardTimer)
