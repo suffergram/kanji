@@ -86,18 +86,6 @@ function mainMenu() {
 }
 
 function newCard(type, arr = undefined) {
-	function shuffleOptions(arr) {
-		for (let shuffle = 0; shuffle < arr.length * 2; shuffle++) {
-			for (let i = 0; i < arr.length - 1; i++) {
-				if (Math.random() < .6) [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]
-			}
-			for (let i = 0; i < arr.length / 2; i++) {
-				if (Math.random() < .6) [arr[i], arr[arr.length - i - 1]] = [arr[arr.length - i - 1], arr[i]]
-			}
-		}
-		return arr
-	}
-
 	function addCardAnswers(typeInput, amountOfAnswers = 4) {
 		let options = new Set([arr[typeInput]])
 		while (options.size < amountOfAnswers) {
@@ -254,6 +242,18 @@ function newCard(type, arr = undefined) {
 	}
 }
 
+function shuffleOptions(arr) {
+	for (let shuffle = 0; shuffle < arr.length * 2; shuffle++) {
+		for (let i = 0; i < arr.length - 1; i++) {
+			if (Math.random() < .6) [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]
+		}
+		for (let i = 0; i < arr.length / 2; i++) {
+			if (Math.random() < .6) [arr[i], arr[arr.length - i - 1]] = [arr[arr.length - i - 1], arr[i]]
+		}
+	}
+	return arr
+}
+
 function disableButtons() {
 	let buttons = container.querySelectorAll('.option')
 	for (let item of buttons) {
@@ -309,13 +309,7 @@ function check(event) {
 function newSession() {
 	answers = []
 	start = Date.now()
-	for (let x = 0; x < sessionArray.length; x++) {
-		for (let i = 0; i < sessionArray.length - 1; i++) {
-			if (Math.round(Math.random())) {
-				[sessionArray[i], sessionArray[i + 1]] = [sessionArray[i + 1], sessionArray[i]]
-			}
-		}
-	}
+	shuffleOptions(sessionArray)
 	session = amount
 	changeCard()
 }
