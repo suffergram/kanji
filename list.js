@@ -363,7 +363,7 @@ const n5vocab = [
 	["出かける",			"to go out; to leave; to depart",													"でかける",			"dekakeru"],
 	["電気",				"electricity",																		"でんき",				"denki"],
 	["電車",				"train; electric train",															"でんしゃ",			"densha"],
-	["電話",				"telephone (call / device)l; phone call",											"でんわ",				"denwa"],
+	["電話",				"telephone (call / device); phone call",											"でんわ",				"denwa"],
 	["出る",				"to leave; to exit; to appear; to go out",											"でる",				"deru"],
 	["動物",				"animal",																			"どうぶつ",			"doubutsu"],
 	["土曜日",			"Saturday",																			"どようび",			"doyoubi"],
