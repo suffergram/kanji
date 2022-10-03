@@ -79,7 +79,7 @@ body {
 	outline: none;
 }
 
-.option {
+.option, #inputsection button {
 	cursor: pointer;
 	background-color: #bb86fc;
 	color: #121212;
@@ -149,4 +149,10 @@ hr {
 .translation p {
 	font-size: 0.8em !important;
 	font-style: italic;
+}
+
+#inputsection {
+	display: grid;
+	grid-template-columns: 7fr 1fr;
+	grid-gap: 5px;
 }
