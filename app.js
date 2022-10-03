@@ -145,10 +145,15 @@ function newCard(type, arr = undefined) {
 	input.type = 'text'
 	input.name = 'input'
 
+	let backspace = document.createElement('button')
+	backspace.innerHTML = '⟵'
+	backspace.classList = 'backspace'
+
+	let inputsection = document.createElement('div')
+	inputsection.id = 'inputsection'
+
 	let translation = document.createElement('p')
 	translation.classList = 'translation description'
-	// translation.hidden = true
-	// translation.innerHTML = 'don\'t cheat'
 	translation.style.opacity = 0
 
 	let div = document.createElement('div')
@@ -210,7 +215,8 @@ function newCard(type, arr = undefined) {
 		case 1:
 			description.innerHTML = 'Type the word in <u>hiragana</u>'
 			word.innerHTML = arr[0]
-			card.append(input)
+			card.append(inputsection)
+			inputsection.append(input, backspace)
 
 			div.classList = 'cardoptions'
 			card.append(div)
@@ -221,7 +227,8 @@ function newCard(type, arr = undefined) {
 		case 2:
 			description.innerHTML = 'Type the word in <u>kanji</u>'
 			word.innerHTML = arr[2]
-			card.append(input)
+			card.append(inputsection)
+			inputsection.append(input, backspace)
 
 			div.classList = 'cardoptions'
 			card.append(div)
@@ -255,7 +262,7 @@ function shuffleOptions(arr) {
 }
 
 function disableButtons() {
-	let buttons = container.querySelectorAll('.option')
+	let buttons = container.querySelectorAll('button')
 	for (let item of buttons) {
 		item.disabled = true
 	}
@@ -399,6 +406,13 @@ container.addEventListener('click', function() {
 
 	if (event.target.className.includes('menu')) {
 		mainMenu()
+	}
+
+	if (event.target.className.includes('backspace')) {
+		let input = container.querySelector('input')
+		if (!!input.value) {
+			input.value = input.value.slice(0, -1)
+		}
 	}
 })
 
