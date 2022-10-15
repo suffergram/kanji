@@ -60,6 +60,7 @@ body {
 	padding: 50px;
 	margin: 10px;
 	width: 395px;
+	max-height: 700px;
 }
 
 #card p {
@@ -129,6 +130,11 @@ body {
 #card .info p {
 	font-style: italic;
 	font-size: 1.2em;
+}
+
+#card .answers {
+	max-height: 65%;
+	overflow-y: auto;
 }
 
 hr {
