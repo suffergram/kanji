@@ -13,9 +13,15 @@ let changeCardTimer = 2000
 // initializing global object
 window.database = {
 	n5kanji: n5kanji,
-	n5vocab: n5vocab,
 	n4kanji: n4kanji,
+	n3kanji: n3kanji,
+	n2kanji: n2kanji,
+	// n1kanji: n1kanji,
+	n5vocab: n5vocab,
 	n4vocab: n4vocab,
+	n3vocab: n3vocab,
+	n2vocab: n2vocab,
+	// n1vocab: n1vocab,
 }
 
 function mainMenu() {
@@ -61,7 +67,7 @@ function mainMenu() {
 	setOptionsBox.id = 'vocabulary'
 	menuContainer.append(setOptionsBox)
 
-	for (let i = 5; i >= 4; i--) {
+	for (let i = 5; i >= 2; i--) {
 		let option = document.createElement('button')
 		option.innerHTML = 'N' + i
 		option.id = 'n' + i + 'kanji'
@@ -69,7 +75,7 @@ function mainMenu() {
 		levelOptionsBox.append(option)
 	}
 
-	for (let i = 5; i >= 4; i--) {
+	for (let i = 5; i >= 2; i--) {
 		let option = document.createElement('button')
 		option.innerHTML = 'N' + i
 		option.id = 'n' + i + 'vocab'
@@ -190,6 +196,7 @@ function newCard(type, arr = undefined) {
 
 			buttonsContainer.append(menuButton)
 			buttonsContainer.append(againButton)
+			div.classList = 'answers'
 			card.append(div)
 			
 			for (let item of answers) {
